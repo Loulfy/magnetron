@@ -75,7 +75,7 @@ G4ThreadLocal G4FieldManager* B5DetectorConstruction::fFieldMgr = 0;
 
 B5DetectorConstruction::B5DetectorConstruction() : G4VUserDetectorConstruction(), fMessenger(nullptr), fMagneticLogical(nullptr), fVisAttributes()
 {
-
+    DefineCommands();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,10 +88,10 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
   ConstructMaterials();
   auto air = G4Material::GetMaterial("G4_AIR");
   //auto argonGas = G4Material::GetMaterial("B5_Ar");
-  auto argonGas = G4Material::GetMaterial("G4_Ar");
-  auto scintillator = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-  auto csI = G4Material::GetMaterial("G4_CESIUM_IODIDE");
-  auto lead = G4Material::GetMaterial("G4_Pb");
+  //auto argonGas = G4Material::GetMaterial("G4_Ar");
+  //auto scintillator = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+  //auto csI = G4Material::GetMaterial("G4_CESIUM_IODIDE");
+  //auto lead = G4Material::GetMaterial("G4_Pb");
   
   // Option to switch on/off checking of volumes overlaps
   //
@@ -109,23 +109,28 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
   
   // Tube with Local Magnetic field
   
-  auto magneticSolid 
-    = new G4Tubs("magneticTubs",0.,1.*m,1.*m,0.,360.*deg);
+  auto magneticSolid = new G4Tubs("magneticTubs",0.,1.*m,1.*m,0.,360.*deg);
 
-  fMagneticLogical
-    = new G4LogicalVolume(magneticSolid, air, "magneticLogical");
+  fMagneticLogical = new G4LogicalVolume(magneticSolid, air, "magneticLogical");
+
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    G4String trackerSDname = "magneticLogical";
+    TrackerSD* aTrackerSD = new TrackerSD(trackerSDname);
+    SDman->AddNewDetector(aTrackerSD);
+    fMagneticLogical->SetSensitiveDetector(aTrackerSD);
 
   // placement of Tube
   
-  G4RotationMatrix* fieldRot = new G4RotationMatrix();
+  auto fieldRot = new G4RotationMatrix();
   fieldRot->rotateX(90.*deg);
   new G4PVPlacement(fieldRot,G4ThreeVector(),fMagneticLogical,
                     "magneticPhysical",worldLogical,
                     false,0,checkOverlaps);
   
   // set step limit in tube with magnetic field  
-  G4UserLimits* userLimits = new G4UserLimits(1*m);
+  auto userLimits = new G4UserLimits(1*m);
   fMagneticLogical->SetUserLimits(userLimits);
+
   /*
   // first arm
   auto firstArmSolid 
@@ -470,9 +475,7 @@ void B5DetectorConstruction::SetArmAngle(G4double val)
 void B5DetectorConstruction::DefineCommands()
 {
   // Define /B5/detector command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this, 
-                                      "/B5/detector/", 
-                                      "Detector control");
+  fMessenger = new G4GenericMessenger(this, "/B5/detector/", "Detector control");
   /*
 
   // armAngle command

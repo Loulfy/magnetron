@@ -35,6 +35,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4RotationMatrix.hh"
 #include "G4FieldManager.hh"
+#include "TrackerSD.hh"
 
 #include <vector>
 
@@ -66,6 +67,7 @@ class B5DetectorConstruction : public G4VUserDetectorConstruction
     
   private:
     void DefineCommands();
+
 
     G4GenericMessenger* fMessenger;
     

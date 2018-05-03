@@ -10,7 +10,7 @@
 /B5/generator/sigmaAngle 0.
 /run/printProgress 5
 #
-/B5/detector/armAngle 30. deg
+#/B5/detector/armAngle 30. deg
 /gun/particle proton
 /B5/generator/momentum 100. GeV
 /B5/field/value 100. tesla

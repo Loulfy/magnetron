@@ -9,7 +9,7 @@ project(B5)
 # to build a batch mode only executable
 #
 
-set(Geant4_DIR "/usr/local/geant4.10.04/lib64/Geant4-10.4.0")
+#set(Geant4_DIR "/usr/local/geant4.10.04/lib64/Geant4-10.4.0")
 
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
 if(WITH_GEANT4_UIVIS)
