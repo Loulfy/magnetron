@@ -103,7 +103,7 @@ void B5EventAction::BeginOfEventAction(const G4Event*)
 {
   // Find hit collections and histogram Ids by names (just once)
   // and save them in the data members of this class
-
+/*
   if (fHodHCID[0] == -1) {
     auto sdManager = G4SDManager::GetSDMpointer();
     auto analysisManager = G4AnalysisManager::Instance();
@@ -129,7 +129,7 @@ void B5EventAction::BeginOfEventAction(const G4Event*)
       fDriftHistoID[kH1][iDet] = analysisManager->GetH1Id(histoName[kH1][iDet]);
       fDriftHistoID[kH2][iDet] = analysisManager->GetH2Id(histoName[kH2][iDet]);
     }
-  }
+  }*/
 }     
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

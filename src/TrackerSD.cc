@@ -17,11 +17,11 @@
 
 //.......................................
 
-TrackerSD::TrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+TrackerSD::TrackerSD(G4String name) : G4VSensitiveDetector(name)
 {
   G4String HCname = "SDHC_";
   collectionName.insert(HCname);
+  file.open("track.txt");
 }
 
 
@@ -30,8 +30,7 @@ TrackerSD::~TrackerSD(){ }
 
 void TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
-  trackerCollection = new TrackerHitsCollection
-                          (SensitiveDetectorName,collectionName[0]); 
+  trackerCollection = new TrackerHitsCollection(SensitiveDetectorName,collectionName[0]);
   static G4int HCID = -1;
   if(HCID<0)
   { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
@@ -41,23 +40,17 @@ void TrackerSD::Initialize(G4HCofThisEvent* HCE)
 
 G4bool TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  G4cout << "Deposited Energy : " << edep << G4endl;
-  if(edep==0.) return false;
-
-  TrackerHit* newHit = new TrackerHit();
-  newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetEdep     (edep);
-  newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
-  trackerCollection->insert( newHit );
-
+  auto pos = aStep->GetPostStepPoint ()->GetPosition ();
+  auto id =  aStep->GetTrack()->GetTrackID();
+  G4cout << "ID:" << id << " " << pos.x () << " " << pos.y () << " " << pos.z () << G4endl;
+  if(id == 1) file << pos.x () << " " << pos.y () << " " << pos.z () << std::endl;
   return true;
 }
 
 
 void TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
-
+  file.close ();
 }
 
 

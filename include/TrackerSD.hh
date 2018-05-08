@@ -14,6 +14,8 @@
 #include "TrackerHit.hh"
 #include "G4VSensitiveDetector.hh"
 
+#include <fstream>
+
 class G4Step;
 class G4HCofThisEvent;
 
@@ -30,6 +32,8 @@ public:
 
 private:
     TrackerHitsCollection* trackerCollection;
+
+  std::ofstream file;
 };
 
 #endif
